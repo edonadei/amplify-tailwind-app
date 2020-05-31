@@ -9,12 +9,13 @@
 					"defaultAuthentication": {
 						"authenticationType": "API_KEY",
 						"apiKeyConfig": {
-							"description": "365",
+							"description": "",
 							"apiKeyExpirationDays": "365"
 						}
 					}
 				}
 			}
 		}
-	}
+	},
+	"auth": {}
 }
