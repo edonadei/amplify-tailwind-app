@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
+import { Button } from "../components/Button";
 import {
   createBlog,
   createComment,
   createPost,
   updateBlog,
   updateComment,
-  updatePost
+  updatePost,
+  deleteBlog,
+  deletePost,
+  deleteComment
 } from "../graphql/mutations";
 import { getBlog, getComment, getPost } from "../graphql/queries";
 
-export const Signin = () => {
+export const AmplifyAPITester = () => {
+  const [blogID, setblogID] = useState(null);
+  const [postID, setpostID] = useState(null);
+  const [commentID, setcommentID] = useState(null);
+
   return (
     <div className="App">
       <div class="min-h-screen bg-white flex">
@@ -18,15 +26,19 @@ export const Signin = () => {
           <div class="mx-auto w-full max-w-sm">
             <div>
               <h2 class="mt-6 text-3xl leading-9 font-extrabold text-gray-900">
-                Let's test Amplify API
+                Amplify API Tester
               </h2>
             </div>
+
+            {
+              /////////////////  CREATE   ////////////////
+            }
 
             <div class="mt-8">
               <div>
                 <div>
                   <p class="text-sm leading-5 font-medium text-gray-700">
-                    Creations
+                    Create
                   </p>
 
                   <div class="mt-1 grid grid-cols-3 gap-3">
@@ -39,7 +51,10 @@ export const Signin = () => {
                                 input: { name: "coucou2" }
                               })
                             )
-                              .then(data => console.log(data))
+                              .then(resultOfPromise => {
+                                console.log(resultOfPromise);
+                                setblogID(resultOfPromise.data.createBlog.id);
+                              })
                               .catch(err => console.log(err));
                           }}
                           type="button"
@@ -63,7 +78,10 @@ export const Signin = () => {
                                 }
                               })
                             )
-                              .then(data => console.log(data))
+                              .then(resultOfPromise => {
+                                console.log(resultOfPromise);
+                                setpostID(resultOfPromise.data.createPost.id);
+                              })
                               .catch(err => console.log(err));
                           }}
                           type="button"
@@ -87,7 +105,12 @@ export const Signin = () => {
                                 }
                               })
                             )
-                              .then(data => console.log(data))
+                              .then(resultOfPromise => {
+                                console.log(resultOfPromise);
+                                setcommentID(
+                                  resultOfPromise.data.createComment.id
+                                );
+                              })
                               .catch(err => console.log(err));
                           }}
                           type="button"
@@ -97,14 +120,28 @@ export const Signin = () => {
                         </button>
                       </span>
                     </div>
+                    {/*
+                    <Button
+                      name="Create msg"
+                      GraphQLQuery={createComment}
+                      setID={setcommentID}
+                      input={{
+                        input: {
+                          postID: "e77d2c5f-fff8-41ce-a52c-c49440615d6e",
+                          content: "Real cool article"
+                        }
+                      }}
+                    />
+                    */}
                   </div>
                 </div>
               </div>
 
+              {
+                /////////////////  GET   ////////////////
+              }
               <div class="mt-8">
-                <p class="text-sm leading-5 font-medium text-gray-700">
-                  Getters
-                </p>
+                <p class="text-sm leading-5 font-medium text-gray-700">Get</p>
                 <div>
                   <div class="mt-1 grid grid-cols-3 gap-3">
                     <div>
@@ -113,7 +150,7 @@ export const Signin = () => {
                           onClick={() => {
                             API.graphql(
                               graphqlOperation(getBlog, {
-                                id: "28c6fcab-6916-4adb-aa9c-a5f619f3bc53"
+                                id: blogID
                               })
                             )
                               .then(data => console.log(data))
@@ -132,7 +169,7 @@ export const Signin = () => {
                           onClick={() => {
                             API.graphql(
                               graphqlOperation(getPost, {
-                                id: "e77d2c5f-fff8-41ce-a52c-c49440615d6e"
+                                id: postID
                               })
                             )
                               .then(data => console.log(data))
@@ -151,7 +188,7 @@ export const Signin = () => {
                           onClick={() => {
                             API.graphql(
                               graphqlOperation(getComment, {
-                                id: "e6cd6591-ca7a-4a8c-a6b9-2ed1e697b44e"
+                                id: commentID
                               })
                             )
                               .then(data => console.log(data))
@@ -168,9 +205,13 @@ export const Signin = () => {
                 </div>
               </div>
 
+              {
+                /////////////////  UPDATE  ////////////////
+              }
+
               <div class="mt-8">
                 <p class="text-sm leading-5 font-medium text-gray-700">
-                  Modifiers
+                  Update
                 </p>
                 <div>
                   <div class="mt-1 grid grid-cols-3 gap-3">
@@ -181,7 +222,7 @@ export const Signin = () => {
                             API.graphql(
                               graphqlOperation(updateBlog, {
                                 input: {
-                                  id: "28c6fcab-6916-4adb-aa9c-a5f619f3bc53",
+                                  id: blogID,
                                   name: "testModified"
                                 }
                               })
@@ -203,7 +244,7 @@ export const Signin = () => {
                             API.graphql(
                               graphqlOperation(updatePost, {
                                 input: {
-                                  id: "e77d2c5f-fff8-41ce-a52c-c49440615d6e",
+                                  id: postID,
                                   title: "How to modify a post"
                                 }
                               })
@@ -225,7 +266,7 @@ export const Signin = () => {
                             API.graphql(
                               graphqlOperation(updateComment, {
                                 input: {
-                                  id: "e6cd6591-ca7a-4a8c-a6b9-2ed1e697b44e",
+                                  id: commentID,
                                   content: "you do edit it like that"
                                 }
                               })
@@ -243,6 +284,83 @@ export const Signin = () => {
                   </div>
                 </div>
               </div>
+
+              {
+                /////////////////  DELETE   ////////////////
+              }
+
+              <div class="mt-8">
+                <p class="text-sm leading-5 font-medium text-gray-700">
+                  Delete
+                </p>
+                <div>
+                  <div class="mt-1 grid grid-cols-3 gap-3">
+                    <div>
+                      <span class="w-full inline-flex rounded-md shadow-sm">
+                        <button
+                          onClick={() => {
+                            API.graphql(
+                              graphqlOperation(deleteBlog, {
+                                input: {
+                                  id: blogID
+                                }
+                              })
+                            )
+                              .then(data => console.log(data))
+                              .catch(err => console.log(err));
+                          }}
+                          type="button"
+                          class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition duration-150 ease-in-out"
+                        >
+                          Delete blog
+                        </button>
+                      </span>
+                    </div>
+                    <div>
+                      <span class="w-full inline-flex rounded-md shadow-sm">
+                        <button
+                          onClick={() => {
+                            API.graphql(
+                              graphqlOperation(deletePost, {
+                                input: {
+                                  id: postID
+                                }
+                              })
+                            )
+                              .then(data => console.log(data))
+                              .catch(err => console.log(err));
+                          }}
+                          type="button"
+                          class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition duration-150 ease-in-out"
+                        >
+                          Delete post
+                        </button>
+                      </span>
+                    </div>
+                    <div>
+                      <span class="w-full inline-flex rounded-md shadow-sm">
+                        <button
+                          onClick={() => {
+                            API.graphql(
+                              graphqlOperation(deleteComment, {
+                                input: {
+                                  id: commentID
+                                }
+                              })
+                            )
+                              .then(data => console.log(data))
+                              .catch(err => console.log(err));
+                          }}
+                          type="button"
+                          class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition duration-150 ease-in-out"
+                        >
+                          Delete msg
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -250,7 +368,7 @@ export const Signin = () => {
         <div class="hidden lg:block relative w-0 flex-1">
           <img
             class="absolute inset-0 h-full w-full object-cover"
-            src="https://images.unsplash.com/photo-1505904267569-f02eaeb45a4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
+            src="https://images.unsplash.com/photo-1516675302207-722c37ce2f71?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1900&q=80"
             alt=""
           />
         </div>
