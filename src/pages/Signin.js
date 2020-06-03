@@ -1,9 +1,14 @@
 import React from "react";
 import { API, graphqlOperation } from "aws-amplify";
-import { createBlog, createComment, createPost } from "../graphql/mutations";
+import {
+  createBlog,
+  createComment,
+  createPost,
+  updateBlog,
+  updateComment,
+  updatePost
+} from "../graphql/mutations";
 import { getBlog, getComment, getPost } from "../graphql/queries";
-import { v4 as uuidv4 } from "uuid";
-import { fireEvent } from "@testing-library/react";
 
 export const Signin = () => {
   return (
@@ -106,9 +111,11 @@ export const Signin = () => {
                       <span class="w-full inline-flex rounded-md shadow-sm">
                         <button
                           onClick={() => {
-                            API.graphql(graphqlOperation(getBlog, {
-                              id: "28c6fcab-6916-4adb-aa9c-a5f619f3bc53"
-                            }))
+                            API.graphql(
+                              graphqlOperation(getBlog, {
+                                id: "28c6fcab-6916-4adb-aa9c-a5f619f3bc53"
+                              })
+                            )
                               .then(data => console.log(data))
                               .catch(err => console.log(err));
                           }}
@@ -123,9 +130,11 @@ export const Signin = () => {
                       <span class="w-full inline-flex rounded-md shadow-sm">
                         <button
                           onClick={() => {
-                            API.graphql(graphqlOperation(getPost, {
-                              id: "e77d2c5f-fff8-41ce-a52c-c49440615d6e"
-                            }))
+                            API.graphql(
+                              graphqlOperation(getPost, {
+                                id: "e77d2c5f-fff8-41ce-a52c-c49440615d6e"
+                              })
+                            )
                               .then(data => console.log(data))
                               .catch(err => console.log(err));
                           }}
@@ -140,9 +149,11 @@ export const Signin = () => {
                       <span class="w-full inline-flex rounded-md shadow-sm">
                         <button
                           onClick={() => {
-                            API.graphql(graphqlOperation(getComment, {
-                              id: "e6cd6591-ca7a-4a8c-a6b9-2ed1e697b44e"
-                            }))
+                            API.graphql(
+                              graphqlOperation(getComment, {
+                                id: "e6cd6591-ca7a-4a8c-a6b9-2ed1e697b44e"
+                              })
+                            )
                               .then(data => console.log(data))
                               .catch(err => console.log(err));
                           }}
@@ -156,9 +167,9 @@ export const Signin = () => {
                   </div>
                 </div>
               </div>
-            
+
               <div class="mt-8">
-              <p class="text-sm leading-5 font-medium text-gray-700">
+                <p class="text-sm leading-5 font-medium text-gray-700">
                   Modifiers
                 </p>
                 <div>
@@ -167,9 +178,14 @@ export const Signin = () => {
                       <span class="w-full inline-flex rounded-md shadow-sm">
                         <button
                           onClick={() => {
-                            API.graphql(graphqlOperation(getBlog, {
-                              id: "28c6fcab-6916-4adb-aa9c-a5f619f3bc53"
-                            }))
+                            API.graphql(
+                              graphqlOperation(updateBlog, {
+                                input: {
+                                  id: "28c6fcab-6916-4adb-aa9c-a5f619f3bc53",
+                                  name: "testModified"
+                                }
+                              })
+                            )
                               .then(data => console.log(data))
                               .catch(err => console.log(err));
                           }}
@@ -184,9 +200,14 @@ export const Signin = () => {
                       <span class="w-full inline-flex rounded-md shadow-sm">
                         <button
                           onClick={() => {
-                            API.graphql(graphqlOperation(getPost, {
-                              id: "e77d2c5f-fff8-41ce-a52c-c49440615d6e"
-                            }))
+                            API.graphql(
+                              graphqlOperation(updatePost, {
+                                input: {
+                                  id: "e77d2c5f-fff8-41ce-a52c-c49440615d6e",
+                                  title: "How to modify a post"
+                                }
+                              })
+                            )
                               .then(data => console.log(data))
                               .catch(err => console.log(err));
                           }}
@@ -201,9 +222,14 @@ export const Signin = () => {
                       <span class="w-full inline-flex rounded-md shadow-sm">
                         <button
                           onClick={() => {
-                            API.graphql(graphqlOperation(getComment, {
-                              id: "e6cd6591-ca7a-4a8c-a6b9-2ed1e697b44e"
-                            }))
+                            API.graphql(
+                              graphqlOperation(updateComment, {
+                                input: {
+                                  id: "e6cd6591-ca7a-4a8c-a6b9-2ed1e697b44e",
+                                  content: "you do edit it like that"
+                                }
+                              })
+                            )
                               .then(data => console.log(data))
                               .catch(err => console.log(err));
                           }}
@@ -218,12 +244,9 @@ export const Signin = () => {
                 </div>
               </div>
             </div>
-
-            
-            
           </div>
         </div>
-        
+
         <div class="hidden lg:block relative w-0 flex-1">
           <img
             class="absolute inset-0 h-full w-full object-cover"
